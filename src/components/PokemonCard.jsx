@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 function PokemonCard({ name, url }) {
   const [details, setDetails] = useState(null);
-
+ 
   useEffect(() => {
     fetch(url)
       .then(response => response.json())
@@ -14,7 +14,7 @@ function PokemonCard({ name, url }) {
       <h2>{name}</h2>
       {details && (
         <div>
-          <img src={details.sprites.front_default} alt={name} />
+         <img src={details.sprites.front_default} alt={name} />
           <p>Height: {details.height}</p>
           <p>Weight: {details.weight}</p>
           <p>Type: {details.types.map(typeInfo => typeInfo.type.name).join(', ')}</p>

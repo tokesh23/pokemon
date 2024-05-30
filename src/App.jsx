@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CiSearch } from "react-icons/ci";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import PokemonList from './components/PokemonList';
+import PokemonCard from './components/PokemonCard';
 import './App.css';
- 
 
 function App() {
   const [pokemon, setPokemon] = useState([]);
@@ -13,7 +14,7 @@ function App() {
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const limit = 20; 
+  const limit = 20;
 
   useEffect(() => {
     fetchPokemon();
@@ -57,30 +58,33 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Pokémon List</h1>
-      <div className="search-container">
-        <CiSearch className="search-icon" />
-        <input className='ipt'
-          type="text"
-          placeholder="Search Pokémon"
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
+    <Router>
+      <div className="App">
+        <h1>Pokémon List</h1>
+        <div className="search-container">
+          <CiSearch className="search-icon" />
+          <input className='ipt'
+            type="text"
+            placeholder="Search Pokémon"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </div>
+        {loading ? <p>Loading...</p> : <PokemonList pokemon={filteredPokemon} />}
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+            Next
+          </button>
+        </div>
+        <Routes>
+          <Route path="/pokemon/:name" element={<PokemonCard />} />
+        </Routes>
       </div>
-      {loading ? <p>Loading...</p> : <PokemonList pokemon={filteredPokemon} />}
-      <div className="pagination">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button>
-        
-      </div>
-    
-    </div>
+    </Router>
   );
 }
 
